@@ -38,7 +38,7 @@ const posts = [
         "media": "https://unsplash.it/600/400?image=24",
         "author": {
             "name": "Luca Formicola",
-            "image": null
+            "image": ""
         },
         "likes": 56,
         "created": "2022-04-03"
@@ -56,12 +56,18 @@ const posts = [
     }
 ];
 
-var liked = [1,2];
-let containerHTML = document.getElementById("container");
+console.log(posts);
+
+//list for liked post
+var likedList = [];
+console.log("liked list "+likedList);
+
 
 
 //CREATE POSTS
-posts.forEach(element => {
+posts.forEach((element) => {
+    //get div
+    let containerHTML = document.getElementById("container");
     containerHTML.innerHTML += `
     <div class="post">
     <div class="post__header">
@@ -88,32 +94,57 @@ posts.forEach(element => {
                 </a>
             </div>
             <div class="likes__counter">
-                Piace a <b id="like-counter-1" class="js-likes-counter">`+element.likes+`</b> persone
+                Piace a <b id="like-counter-`+element.id+`" class="js-likes-counter">`+element.likes+`</b> persone
             </div>
         </div> 
     </div>            
 </div>`;
-
-document.querySelector(".like-button").addEventListener("click", function (){like(element.id);});
-
 });
 
+// like functions
+posts.forEach((element, index) => {
 
-//LIKE FUNCTION
-function like(id){
-    if (liked.includes(id) == false){
-        var buttonHTML = document.querySelector(`[data-postid="`+id+`"]`);
-        buttonHTML.classList.add("like-button--liked");
-    }
-    else {
-        // buttonHTML.classList.remove("like-button--liked");
-    }
+    //get div
+    var buttonHTML = document.querySelector(`[data-postid="`+element.id+`"]`);
+    var likeCountHTML = document.getElementById(element.id);
+    console.log(buttonHTML);
 
-}
+    //when clicked like button
+    buttonHTML.addEventListener("click", function (){
 
+        //check if post is already liked. if not
+        if (likedList.includes(element.id) == false){
+            //change class
+            buttonHTML.classList.add("like-button--liked");
 
+            //add postid to likedList
+            likedList.push(element.id);
+            console.log("Liked post "+element.id);
+            console.log("liked list "+likedList);
 
+            //print on html
+            var newlikes = element.likes + 1;
+            likeCountHTML.innerHTML = newlikes;
+            
+        }
+        //if yes
+        else {
 
+            //remove class
+            buttonHTML.classList.remove("like-button--liked");
+
+            //remove postid from likedList
+            const index = likedList.indexOf(element.id);
+
+            // only splice array when item is found
+            if (index >= 0) { 
+                likedList.splice(index, 1); // 2nd parameter means remove one item only
+            }
+            console.log("Disliked post "+element.id);
+            console.log("liked list "+likedList);
+        }
+    });
+});
 
 
 //POSTS TIME FUNCTION
@@ -153,4 +184,3 @@ function timeSince(value) {
     //se in fine interval non corrisponde a nessun if, saranno in secondi
     return Math.floor(seconds) + " seconds";
   }
-
