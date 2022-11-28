@@ -104,9 +104,9 @@ posts.forEach((element) => {
 // like functions
 posts.forEach((element, index) => {
 
-    //get div
+    //get 
     var buttonHTML = document.querySelector(`[data-postid="`+element.id+`"]`);
-    var likeCountHTML = document.getElementById(element.id);
+    var likeCountHTML = document.getElementById("like-counter-"+element.id);
     console.log(buttonHTML);
 
     //when clicked like button
@@ -136,10 +136,15 @@ posts.forEach((element, index) => {
             //remove postid from likedList
             const index = likedList.indexOf(element.id);
 
+            
             // only splice array when item is found
             if (index >= 0) { 
                 likedList.splice(index, 1); // 2nd parameter means remove one item only
             }
+
+            newlikes = element.likes;
+            likeCountHTML.innerHTML = newlikes;
+
             console.log("Disliked post "+element.id);
             console.log("liked list "+likedList);
         }
